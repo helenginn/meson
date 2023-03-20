@@ -52,12 +52,11 @@ class GLDependencySystem(SystemDependency):
             # FIXME: Detect version using self.clib_compiler
             return
         else:
-            lib = self.clib_compiler.find_library('GL', environment, [])
-            headers = self.clib_compiler.has_header('GL/gl.h', '', environment)
-            has_header = len(headers) > 0
+            links = self.clib_compiler.find_library('GL', environment, [])
+            has_header = self.clib_compiler.has_header('GL/gl.h', '', environment)
             if lib and has_header:
                 self.is_found = True
-                self.link_args = lib
+                self.link_args = links
 
 class GnuStepDependency(ConfigToolDependency):
 
