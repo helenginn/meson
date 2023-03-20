@@ -57,6 +57,8 @@ class GLDependencySystem(SystemDependency):
             if lib and has_header:
                 self.is_found = True
                 self.link_args = links
+            elif lib:
+                raise DependencyException('Found GL runtime library but no development header files')
 
 class GnuStepDependency(ConfigToolDependency):
 
