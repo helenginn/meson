@@ -45,6 +45,11 @@ class GLDependencySystem(SystemDependency):
             self.link_args = ['-framework', 'OpenGL']
             # FIXME: Detect version using self.clib_compiler
             return
+        if self.env.machines[self.for_machine].is_linux():
+            lib = self.clib_compiler.find_library('GL', environment, [])
+            if lib:
+                self.is_found = True
+                self.link_args = lib
         if self.env.machines[self.for_machine].is_windows():
             self.is_found = True
             # FIXME: Use self.clib_compiler.find_library()
