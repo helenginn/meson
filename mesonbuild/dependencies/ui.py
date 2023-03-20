@@ -45,17 +45,19 @@ class GLDependencySystem(SystemDependency):
             self.link_args = ['-framework', 'OpenGL']
             # FIXME: Detect version using self.clib_compiler
             return
-        if self.env.machines[self.for_machine].is_linux():
-            lib = self.clib_compiler.find_library('GL', environment, [])
-            if lib:
-                self.is_found = True
-                self.link_args = lib
-        if self.env.machines[self.for_machine].is_windows():
+        elif self.env.machines[self.for_machine].is_windows():
             self.is_found = True
             # FIXME: Use self.clib_compiler.find_library()
             self.link_args = ['-lopengl32']
             # FIXME: Detect version using self.clib_compiler
             return
+        else:
+            lib = self.clib_compiler.find_library('GL', environment, [])
+            headers = self.clib_compiler.has_header('GL/gl.h', '', environment)
+            has_header = len(headers) > 0
+            if lib and has_header:
+                self.is_found = True
+                self.link_args = lib
 
 class GnuStepDependency(ConfigToolDependency):
 
